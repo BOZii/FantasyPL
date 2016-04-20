@@ -113,49 +113,47 @@ module.exports = function(app, passport, jwt) {
                 // if there is no user with that email
                 var ext = email.split("@")[1];
                 //console.log(ext);
-                if(ext !== 'vcu.edu'){
-                    return done(null, false, req.flash('signupMessage', 'That email is not an @vcu.edu domain.'))
-                }else{
-                    // create the user
-                    var newUser            = new User();
+                
+                // create the user
+                var newUser            = new User();
 
-                    // set the user's local credentials
-                    newUser.local.email    = email;
-                    newUser.local.password = newUser.generateHash(password);
-                    newUser.role           = req.body.role;
-                    newUser.validated      = false;
+                // set the user's local credentials
+                newUser.local.email    = email;
+                newUser.local.password = newUser.generateHash(password);
+                newUser.role           = req.body.role;
+                newUser.validated      = false;
 
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
+                // save the user
+                newUser.save(function(err) {
+                    if (err)
+                        throw err;
 
-                        var token = jwt.encode({ id :  newUser.id }, app.get('tokenSecret'));
+                    var token = jwt.encode({ id :  newUser.id }, app.get('tokenSecret'));
 
-                        var textLink = "http://" + req.headers.host + "/verif?token=" + token;
+                    var textLink = "http://" + req.headers.host + "/verif?token=" + token;
 
-                        var mailOptions = {
-                            from: 'Whiteboard ✔ <whiteboard491@gmail.com>', // sender address
-                            to: email, // list of receivers
-                            subject: 'Whiteboard Email Verification ✔', // Subject line
-                            //text: ,  plaintext body
-                            generateTextFromHTML: true,
-                            html: '<b>Signup Confirmation ✔</b><br />'
-                                + '<a href=\"'+ textLink.toString() + '\">Click here to activate your account.</a>'
-                                + '<br />' 
-                                + '<br /> Text link: ' + textLink
-                            };
+                    var mailOptions = {
+                        from: 'Whiteboard ✔ <whiteboard491@gmail.com>', // sender address
+                        to: email, // list of receivers
+                        subject: 'Whiteboard Email Verification ✔', // Subject line
+                        //text: ,  plaintext body
+                        generateTextFromHTML: true,
+                        html: '<b>Signup Confirmation ✔</b><br />'
+                            + '<a href=\"'+ textLink.toString() + '\">Click here to activate your account.</a>'
+                            + '<br />' 
+                            + '<br /> Text link: ' + textLink
+                        };
 
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, function(error, info){
-                            if(error){
-                                return done(error);
-                            }else{
-                                return done(null, newUser, req.flash('signupMessage','Verification has been sent to your email. Please follow the link to complete registration.'));
-                            }
-                        });
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, function(error, info){
+                        if(error){
+                            return done(error);
+                        }else{
+                            return done(null, newUser, req.flash('signupMessage','Verification has been sent to your email. Please follow the link to complete registration.'));
+                        }
                     });
-                }
+                });
+                
             }
 
         });

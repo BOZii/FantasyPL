@@ -6,6 +6,8 @@ module.exports = function(app, passport, jwt, io) {
         //var CourseModel        = require('../app/models/course');
         var AuthModel          = require('../app/models/auth');
         //var CheckInModel       = require('../app/models/checkIn');
+        var PlayerModel        = require('../app/models/player');
+        var TeamModel          = require('../app/models/team');
         
         var moment             = require('moment');
         var nodemailer         = require('nodemailer');
@@ -102,7 +104,8 @@ module.exports = function(app, passport, jwt, io) {
 
         //Web App: Get home page
         app.get('/', checkSession, function(req, res) {
-            res.render('index_3.ejs'); // load the index.ejs file
+            res.redirect('/login');
+            //res.render('index_3.ejs'); // load the index.ejs file
         });
 
         // Web App: Get login page
@@ -251,7 +254,7 @@ module.exports = function(app, passport, jwt, io) {
             res.redirect('/');
         });
 
-///==================
+        ///==================
         /// restAPI Get/Post/etc
         /// ====================
         // Api: get all users
@@ -277,6 +280,24 @@ module.exports = function(app, passport, jwt, io) {
                     return res.json({status : "error in find"});
                 }
                 });
+        });
+
+        app.get('/api/players', isAuth, function (req,res){
+            return PlayerModel.find(function(err, players) {
+                if(!err)
+                        return res.send(players);
+                else
+                    return res.json({status : "error in find players"});
+            });
+        });
+
+        app.get('/api/teams', isAuth, function (req,res){
+            return TeamModel.find(function(err, teams) {
+                if(!err)
+                        return res.send(teams);
+                else
+                    return res.json({status : "error in find teams"});
+            });
         });
 
 
