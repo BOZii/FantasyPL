@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+	<% include head_dash %>
+    <script type="text/javascript" src="/js/course.js"></script>
+</head>
+<header>
+	<% include header_add %>
+</header>
+<body>
+<div class="container" style="height: 700px;">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        </div>
+    </div>
+
+    <div class="text-left well">
+        <div style="display: inline-block;">
+            <h1> <%= course.section %> <%= course.num %> <br> <%= course.name %> <br></h1>
+            <h3 class="text-muted" style="display: inline-block;"> @ <%= course.startTime %> for <%= course.duration %> min.</h3>
+        </div>
+        
+        <div style="display: inline-block; float: right;">
+            <form method="post" action="/course/delete/<%= course.id %>" onsubmit="return confirm('Do you really want to delete this course?');">
+                <button type="submit" class="btn btn-danger"><span class="fa fa-trash"></span> Delete</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- show any messages that come back with authentication -->
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="page-header">
+                <h3><span class="fa fa-bullhorn"></span> Announcements <a data-toggle="modal" data-target="#announce"><span class="fa fa-plus-square-o" style="padding-left: 5%; cursor: pointer;"></span></a></h3>
+            </div>
+            <div>
+                <% for(var i = course.announce.length; i --> 0; ) { %>
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading"><%= course.announce[i].body %></h4>
+                        <br>
+                        <p class="list-group-item-text text-muted" style="display: inline-block; margin-right: 10%;">Posted: <%= course.announce[i].create %></p>
+                    </div>
+                 <% } %>
+                 <% if(course.announce.length < 1) { %>
+                        <p class="text-muted">No Announcements</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="col-sm-4">
+            <div class="page-header">
+                <h3><span class="fa fa-file-text-o"></span> Assignments <span class="badge"></span><a data-toggle="modal" data-target="#assign"><span class="fa fa-plus-square-o" style="padding-left: 20%; cursor: pointer;"></span></a></h3>
+            </div>
+            <div>
+                <% for(var j = course.assign.length; j --> 0; ) { %>
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading"><%= course.assign[j].name %></h4>
+                        <p class="list-group-item-text"><%= course.assign[j].body %></p>
+                        <p class="list-group-item-text">Due <%= course.assign[j].dueDate %> @ <%= course.assign[j].dueTime %></p>
+                        <p class="list-group-item-text">Points: <%= course.assign[j].points %></p>
+                        <br>
+                        <p class="list-group-item-text text-muted">Posted: <%= course.assign[j].create %></p>
+                    </div>
+                 <% } %>
+                 <% if(course.assign.length < 1) { %>
+                        <p class="text-muted">No Assignments</p>
+                <% } %>
+            </div>
+        </div>  
+        <div class="col-sm-4">
+          <div class="page-header">
+                <h3><span class="fa fa-users"></span> Students <a href='/course/checkin/<%= course.id %>' class="btn btn-success" style="margin-left: 20%;"><span class="fa fa-check-square-o"></span> Check-In</a></h3>
+            </div>
+            <div>
+                <% for(var k = course.students.length; k --> 0; ) { %>
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading"><span class="fa fa-circle-o" style="padding-left: 10%; padding-right: 5%;" ></span><%= course.students[k].email %></h4>
+                        <br>
+                    </div>
+                 <% } %>
+                 <% if(course.students.length < 1) { %>
+                        <p class="text-muted">No Students</p>
+                <% } %>
+            </div>
+        </div>
+        <!--
+        <div class="col-sm-4">
+            <div class="page-header">
+                <h3><span class="fa fa-check-square-o"></span> Check-Ins <span class="badge"></span><a data-toggle="modal" data-target="#myModal"><span class="fa fa-qrcode" style="padding-left: 20%; cursor: pointer;"></span></a></h3>
+            </div>
+            <% if(true) { %>
+            <div>
+                <p class="text-muted">No Check-Ins</p>
+            </div>
+            <% } %>
+        </div>-->
+    </div>
+
+<!-- Modal Announcement-->
+<div class="modal fade" id="announce" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create an Announcement</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/course/announce/<%= course.id %>' method="post">
+          <div class="form-group">
+            <label for="message" class="control-label">Message:</label>
+            <textarea class="form-control" id="message" name="message"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Assignment-->
+<div class="modal fade" id="assign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create an Assignment</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/course/assign/<%= course.id %>' method="post">
+          <div class="form-group">
+            <label for="name" class="control-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name"></input>
+          </div>
+          <div class="form-group">
+            <label for="body" class="control-label">Info:</label>
+            <textarea class="form-control" id="message" name="body"></textarea>
+          </div>
+          <div class="form-group" style="width: 30%; display: inline-block; margin-right: 9%;">
+            <label for="name" class="control-label">Date Due:</label>
+            <input type="text" class="form-control" id="date" name="date"></input>
+          </div>
+          <div class="form-group" style="width: 20%; display: inline-block;  margin-right: 9%;">
+            <label for="time" class="control-label">Time Due:</label>
+            <input type="text" class="form-control" id="time" name="time"></input>
+          </div>
+          <div class="form-group" style="width: 30%; display: inline-block;">
+            <label for="points" class="control-label">Total Points:</label>
+            <input class="form-control" id="points" name="points"></input>
+          </div>
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+<footer>
+    <% include footer_dash %>
+</footer>
+</html>

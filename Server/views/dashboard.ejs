@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+	<% include head_dash %>
+    <script type="text/javascript" scr="/js/dashboard.js"></script>
+</head>
+<header>
+	<% include header_dash %>
+</header>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        </div>
+    </div>
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-book"></span> My Courses<span class="badge"></span></h1>
+    </div>
+
+    <!-- show any messages that come back with authentication -->
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3" style="height: 500px;">
+            
+           <!-- <button type="button" class="courseBtn btn btn-default btn-lg" style="background: white;">Add a Course</button> -->
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <footer>
+            <% include footer_dash %>
+        </footer>
+        
+    </div>
+</div>
+</body>
+</html>
