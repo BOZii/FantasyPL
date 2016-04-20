@@ -11,6 +11,8 @@ module.exports = function(app, passport, jwt, io) {
         
         var moment             = require('moment');
         var nodemailer         = require('nodemailer');
+        var cheerio            = require('cheerio');
+        var request            = require('request');
 
         // create reusable transporter object using SMTP transport
         var transporter = nodemailer.createTransport({
@@ -187,6 +189,17 @@ module.exports = function(app, passport, jwt, io) {
                     user : req.user,  //get the user out of session and pass to template
                     message : req.flash('dashMessage')
                 });
+        });
+
+
+        app.get('/scrape', function(req,res){
+            var url = "http://m.fantasy.premierleague.com/player-list/";
+            request(url, function(error, response, html){
+                if(error)
+                    console.log(error);
+                console.log(html);
+
+            });
         });
 
         /*
