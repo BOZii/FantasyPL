@@ -173,34 +173,96 @@ module.exports = function(app, passport, jwt, io) {
 
         // Web App: Get the dashboard if logged in and are a Professor
         app.get('/dashboard', isLoggedIn, isProf, function(req, res) {
-            /*
-            return CourseModel.find({'professor': req.user.id }, function(err, course){
+            
+            return PlayerModel.find(function(err, players){
                 if(err) 
                     throw err;
                 res.render('dashboard.ejs', {
-                    course: course,
+                    players: players,
                     user : req.user,  //get the user out of session and pass to template
                     message : req.flash('dashMessage')
                 });
             });
-            */
-            res.render('dashboard.ejs', {
+            
+            /*res.render('dashboard.ejs', {
                     course: null,
                     user : req.user,  //get the user out of session and pass to template
                     message : req.flash('dashMessage')
-                });
+                });*/
         });
 
 
+        
+        /*
         app.get('/scrape', function(req,res){
             var url = "http://m.fantasy.premierleague.com/player-list/";
             request(url, function(error, response, html){
-                if(error)
-                    console.log(error);
-                console.log(html);
+                if(!error)
+                    var $ = cheerio.load(html);
+
+                var name, team, prev, line, lname, fname, team;
+
+                var dataArray = html.split('\n');
+
+                
+                var currentGroup = "idle";
+                for(var i=16; i < dataArray.length; i++){
+                    line = dataArray[i].toString().trim();
+                    if(line === '<h2>Goalkeepers</h2>'){
+                        currentGroup = "Goalkeepers";
+                        console.log("Current Group: " + currentGroup);
+                    } else if (line === "<h2>Defenders</h2>"){
+                        currentGroup = "Defenders";
+                        console.log("Current Group: " + currentGroup);
+                    } else if(line === "<h2>Forwards</h2>"){
+                        currentGroup = "Forwards";
+                        console.log("Current Group: " + currentGroup);
+                    }
+
+                    
+                    //console.log(line);
+
+                    if(line === '<tr>'){
+                        console.log(currentGroup)
+                        console.log("Am I a <tr> >: " + dataArray[i].toString().trim())
+                        console.log('Name: ' + dataArray[i + 1].toString().trim());
+                        lname = dataArray[i + 1].toString().trim();
+                        console.log('Team: ' + dataArray[i + 2].toString().trim());
+                        team = dataArray[i + 2].toString().trim();
+
+
+                        lname = lname.replace('<td>','');
+                        lname = lname.replace('</td>','');
+                        lname = lname.trim();
+
+                        team = team.replace('<td>','');
+                        team = team.replace('</td>','');
+                        team = team.trim();
+
+                        console.log("name: " + lname);
+                        console.log("team: " + team);
+
+                        PlayerModel.findOneAndUpdate({LName: lname}, {$set:{Position:currentGroup}}, {new: true}, function(err, doc){
+                            if(err){
+                                console.log("Something wrong when updating data!");
+                            }
+
+                            console.log(doc);
+                        });
+
+                        
+
+                        console.log('------------------- ADDING ------------------');
+
+                    }
+
+
+                    prev = dataArray[i];
+                }
 
             });
         });
+        */
 
         /*
         // Web App: Get the addcourse page
