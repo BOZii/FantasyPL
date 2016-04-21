@@ -191,6 +191,18 @@ module.exports = function(app, passport, jwt, io) {
                 });*/
         });
 
+        app.get('/players', isLoggedIn, function(req,res){
+            return PlayerModel.find(function(err, players){
+                if(err) 
+                    throw err;
+                res.render('players.ejs', {
+                    players: players,
+                    user : req.user,  //get the user out of session and pass to template
+                    message : req.flash('dashMessage')
+                });
+            });
+        });
+
 
         
         /*
