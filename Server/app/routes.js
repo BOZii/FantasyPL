@@ -204,6 +204,33 @@ module.exports = function(app, passport, jwt, io) {
         });
 
 
+        app.get('/players/delete/all', function(req,res){
+            return PlayerModel.find(function(err, players){
+                if(err) 
+                    res.json({status: err})
+
+                for(var i=0; i < players.length; i++){
+                    players[i].remove(function (err) {
+                        if (err) {
+                            return res.json({status : false});
+                        } else {
+                            //console.log(err);
+                            return res.json({status : true });
+                        }
+                    });
+                }
+                /*player.remove(function (err) {
+                        if (err) {
+                            return res.json({status : false});
+                        } else {
+                            //console.log(err);
+                            return res.json({status : true });
+                        }
+                    });*/
+            });
+        });
+
+
         
         /*
         app.get('/scrape', function(req,res){
@@ -216,7 +243,8 @@ module.exports = function(app, passport, jwt, io) {
 
                 var dataArray = html.split('\n');
 
-                
+                console.log(html);
+
                 var currentGroup = "idle";
                 for(var i=16; i < dataArray.length; i++){
                     line = dataArray[i].toString().trim();
@@ -228,6 +256,9 @@ module.exports = function(app, passport, jwt, io) {
                         console.log("Current Group: " + currentGroup);
                     } else if(line === "<h2>Forwards</h2>"){
                         currentGroup = "Forwards";
+                        console.log("Current Group: " + currentGroup);
+                    } else if (line === "<h2>Midfielders</h2>"){
+                        currentGroup = "Midfielders";
                         console.log("Current Group: " + currentGroup);
                     }
 
@@ -254,17 +285,31 @@ module.exports = function(app, passport, jwt, io) {
                         console.log("name: " + lname);
                         console.log("team: " + team);
 
-                        PlayerModel.findOneAndUpdate({LName: lname}, {$set:{Position:currentGroup}}, {new: true}, function(err, doc){
-                            if(err){
-                                console.log("Something wrong when updating data!");
-                            }
-
-                            console.log(doc);
-                        });
+                        console.log('------------------- ADDING ------------------');
 
                         
+                        //PlayerModel.findOneAndUpdate({LName: lname}, {$set:{Position:currentGroup}}, {new: true}, function(err, doc){
+                        //  if(err){
+                        //        console.log("Something wrong when updating data!");
+                        //    }
+                        //
+                        //    console.log(doc);
+                        //});
+                        
 
-                        console.log('------------------- ADDING ------------------');
+                        var player = new PlayerModel();
+                        player.LName = lname;
+                        player.Team = team;
+                        player.Position = currentGroup;
+
+                        player.save(function(err){
+                            if(err)
+                                return res.send(err);
+                        });
+                
+                        
+
+                        console.log('------------------- ADDED ------------------');
 
                     }
 
@@ -273,8 +318,8 @@ module.exports = function(app, passport, jwt, io) {
                 }
 
             });
-        });
-        */
+        }); 
+            */    
 
         /*
         // Web App: Get the addcourse page
@@ -547,6 +592,23 @@ module.exports = function(app, passport, jwt, io) {
                        });
                     }
                 });
+            });
+        });
+
+        app.post('/players/delete/:id', function(req,res){
+            PlayerModel.findById(req.params.id, function (err, player) {
+                try{
+                    return player.remove(function (err) {
+                        if (err) {
+                            return res.json({status : false});
+                        } else {
+                            //console.log(err);
+                            return res.json({status : true });
+                        }
+                    });
+                }catch(err){
+                    return res.json({status : 'error caught in delete'});
+                }
             });
         });
 

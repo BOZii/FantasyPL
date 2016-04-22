@@ -2,7 +2,7 @@
 <html>
 <head>
 	<% include head_dash %>
-    <script type="text/javascript" scr="/js/dashboard.js"></script>
+    <script type="text/javascript" scr="/js/players.js"></script>
 </head>
 <header>
 	<% include header_dash %>
@@ -23,17 +23,21 @@
 
     <!-- show any messages that come back with authentication -->
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-3 col-md-offset-1 col-md-10 col-lg-6 col-lg-offset-3">
             
            <!-- <button type="button" class="courseBtn btn btn-default btn-lg" style="background: white;">Add a Course</button> -->
 
            
            <% for(var i=0; i < players.length; i++) { %>
-                <a href='/course/<%= players[i].id %>' class="courseBtn btn btn-default btn-lg" style="background: white; word-break: break-all;">
+                <div class="courseBtn" style="background: white; word-break: break-all;">
+                     
                      <b>Name: </b> <%= players[i].LName %> <br /> 
                      <b>Team: </b> <%= players[i].Team %> <br />
-                     <b>Position: </b> <%= players[i].Position %>   <span class="badge pull-right">  </span>
-                </a>
+                     <b>Position: </b> <%= players[i].Position %>  <span class="pull-right"><b>Mongo Id: </b> <%= players[i].id %></span>
+                    
+                     
+                </div>
+                <hr />
             <% } %>
 
             <% if(players.length < 1) { %>
