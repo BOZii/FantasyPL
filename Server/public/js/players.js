@@ -1,6 +1,10 @@
+$(document).ready(function() {
+	
 
-	console.log(loaded);
 
-	$('.delete').click(function(){
-		alert('hello');
-	});
+	$('#example').DataTable( {
+        
+    } );
+    
+
+} );

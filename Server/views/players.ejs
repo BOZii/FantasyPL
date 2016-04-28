@@ -2,7 +2,10 @@
 <html>
 <head>
 	<% include head_dash %>
-    <script type="text/javascript" scr="/js/players.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
+
+    <script type="text/javascript" src="/js/players.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 </head>
 <header>
 	<% include header_dash %>
@@ -23,11 +26,12 @@
 
     <!-- show any messages that come back with authentication -->
     <div class="row">
-        <div class="col-sm-3 col-md-offset-1 col-md-10 col-lg-6 col-lg-offset-3">
+        <div class="col-md-offset-1 col-md-10 col-lg-10 col-lg-offset-1">
             
            <!-- <button type="button" class="courseBtn btn btn-default btn-lg" style="background: white;">Add a Course</button> -->
 
            
+           <!--
            <% for(var i=0; i < players.length; i++) { %>
                 <div class="courseBtn" style="background: white; word-break: break-all;">
                      
@@ -43,8 +47,36 @@
             <% if(players.length < 1) { %>
                 <h1 class="text-muted text-center" style="margin-bottom: 500px;">No Players</h1>
             <% } %>
-            
+            -->
 
+            <table id="example" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>mongo _id</th>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i=0; i < players.length; i++) { %>
+                        <tr>
+                             <td><%= players[i].id %></td>
+                             <td><%= players[i].LName %></td>
+                             <td><%= players[i].Team %></td>
+                             <td><%= players[i].Position %> </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>mongo _id</th>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                    </tr>
+                </tfoot>
+            </table>
 
 
         </div>
