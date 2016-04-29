@@ -110,6 +110,10 @@ module.exports = function(app, passport, jwt, io) {
             //res.render('index_3.ejs'); // load the index.ejs file
         });
 
+        app.get('/playTable', function(req,res) {
+            res.render('playTable.ejs');
+        });
+
         // Web App: Get login page
         app.get('/login', checkSession, function(req, res) {
             res.render('login.ejs', { message: req.flash('loginMessage') }); 
@@ -193,6 +197,7 @@ module.exports = function(app, passport, jwt, io) {
 
         app.get('/players', isLoggedIn, function(req,res){
             return PlayerModel.find(function(err, players){
+                console.log(players);
                 if(err) 
                     throw err;
                 res.render('players.ejs', {
