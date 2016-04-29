@@ -44,11 +44,10 @@ $(document).ready(function() {
     
 
     $('.update').click( function(){
-    	var id, url, formData, First, Last, Amount, flag;
+    	var id, url, formData, Name, Amount, flag;
     	
     	id = this.id.split('update_')[1];
-    	First = $('#FName_' + id).val();
-    	Last = $('#LName_' + id).val();
+    	Name = $('#Name_' + id).val();
 	    Amount = $('#Price_' + id).val();
 
 
@@ -58,13 +57,8 @@ $(document).ready(function() {
 	    	flag = false;
 	    }
 
-	    if(!First || First == 'undefined'){
-	    	alert("Invalid First");
-	    	flag = false;
-	    }
-
-	    if(!Last || Last == 'undefined'){
-	    	alert("Invalid Last");
+	    if(!Name || Name == 'undefined'){
+	    	alert("Invalid Name");
 	    	flag = false;
 	    }
 
@@ -77,8 +71,7 @@ $(document).ready(function() {
 	    
 			    formData = {
 			        player: id,
-			        FName: First,
-			        LName: Last,
+			        Name: Last,
 			        Price: Amount,
 			    };
 

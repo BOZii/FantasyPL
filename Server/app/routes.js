@@ -236,15 +236,17 @@ module.exports = function(app, passport, jwt, io) {
         });
 
 
+
+
         
-        /*
+        
         app.get('/scrape', function(req,res){
-            var url = "http://m.fantasy.premierleague.com/player-list/";
+            var url = "http://localhost:8080/playTable";
             request(url, function(error, response, html){
                 if(!error)
                     var $ = cheerio.load(html);
 
-                var name, team, prev, line, lname, fname, team;
+                var name, team, prev, line, lname, fname, team, price;
 
                 var dataArray = html.split('\n');
 
@@ -275,8 +277,12 @@ module.exports = function(app, passport, jwt, io) {
                         console.log("Am I a <tr> >: " + dataArray[i].toString().trim())
                         console.log('Name: ' + dataArray[i + 1].toString().trim());
                         lname = dataArray[i + 1].toString().trim();
+
                         console.log('Team: ' + dataArray[i + 2].toString().trim());
                         team = dataArray[i + 2].toString().trim();
+
+                        console.log('Price: ' + dataArray[i + 4].toString().trim());
+                        price = dataArray[i + 4].toString().trim();
 
 
                         lname = lname.replace('<td>','');
@@ -287,8 +293,18 @@ module.exports = function(app, passport, jwt, io) {
                         team = team.replace('</td>','');
                         team = team.trim();
 
+                        price = price.replace('<td>','');
+                        price = price.replace('</td>','');
+                        price = price.replace('£','');
+                        price = price.trim();
+
+
+
+
+
                         console.log("name: " + lname);
                         console.log("team: " + team);
+                        console.log("price: " + price);
 
                         console.log('------------------- ADDING ------------------');
 
@@ -302,16 +318,18 @@ module.exports = function(app, passport, jwt, io) {
                         //});
                         
 
+                        
                         var player = new PlayerModel();
-                        player.LName = lname;
+                        player.Name = lname;
                         player.Team = team;
                         player.Position = currentGroup;
+                        player.Price = price;
 
                         player.save(function(err){
                             if(err)
                                 return res.send(err);
                         });
-                
+                    
                         
 
                         console.log('------------------- ADDED ------------------');
@@ -324,7 +342,7 @@ module.exports = function(app, passport, jwt, io) {
 
             });
         }); 
-            */    
+       
 
         /*
         // Web App: Get the addcourse page
@@ -435,7 +453,7 @@ module.exports = function(app, passport, jwt, io) {
                 if(err)
                     return res.json(err);
 
-                player.FName = req.body.FName;
+                player.Name = req.body.Name;
                 player.Price = req.body.Price;
 
                 player.save(function(err){

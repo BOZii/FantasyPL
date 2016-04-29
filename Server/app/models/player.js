@@ -5,8 +5,7 @@ var mongoose = require('mongoose');
 var playerSchema = mongoose.Schema({
 
     Team             : String,
-    FName            : String,
-    LName            : String,
+    Name            : String,
     Position         : String,
     Price            : String
     /*
