@@ -240,6 +240,7 @@ module.exports = function(app, passport, jwt, io) {
 
         
         
+        /*
         app.get('/scrape', function(req,res){
             var url = "http://localhost:8080/playTable";
             request(url, function(error, response, html){
@@ -342,7 +343,7 @@ module.exports = function(app, passport, jwt, io) {
 
             });
         }); 
-       
+       */
 
         /*
         // Web App: Get the addcourse page
