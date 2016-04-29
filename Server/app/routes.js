@@ -423,6 +423,24 @@ module.exports = function(app, passport, jwt, io) {
             });
         });
 
+
+        app.post('/api/players/update/:id', function(req,res){
+            console.log(req.body);
+            PlayerModel.findById(req.params.id, function (err, player) {
+                if(err)
+                    return res.json(err);
+
+                player.FName = req.body.FName;
+                player.Price = req.body.Price;
+
+                player.save(function(err){
+                    if(err)
+                        return res.json(false);
+                    return res.json(true);
+                });
+            });
+        })
+
         app.get('/api/teams', isAuth, function (req,res){
             return TeamModel.find(function(err, teams) {
                 if(!err)
@@ -595,15 +613,15 @@ module.exports = function(app, passport, jwt, io) {
             });
         });
 
-        app.post('/players/delete/:id', function(req,res){
+        app.post('/api/players/delete/:id', function(req,res){
             PlayerModel.findById(req.params.id, function (err, player) {
                 try{
                     return player.remove(function (err) {
                         if (err) {
-                            return res.json({status : false});
+                            return res.json(false);
                         } else {
                             //console.log(err);
-                            return res.json({status : true });
+                            return res.json(true);
                         }
                     });
                 }catch(err){

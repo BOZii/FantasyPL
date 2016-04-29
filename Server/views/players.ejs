@@ -26,12 +26,14 @@
 
     <!-- show any messages that come back with authentication -->
     <div class="row">
-        <div class="col-md-offset-1 col-md-10 col-lg-10 col-lg-offset-1">
+        <div class="col-lg-12">
             
            <!-- <button type="button" class="courseBtn btn btn-default btn-lg" style="background: white;">Add a Course</button> -->
 
            
            <!--
+
+           READONLY PRINT OF ALL PLAYERS
            <% for(var i=0; i < players.length; i++) { %>
                 <div class="courseBtn" style="background: white; word-break: break-all;">
                      
@@ -49,6 +51,9 @@
             <% } %>
             -->
 
+            
+
+            //DATATABLE REPRESENTATION OF PLAYERS
             <table id="example" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -77,7 +82,52 @@
                     </tr>
                 </tfoot>
             </table>
-
+            <br />
+            <hr />
+            <br />
+            <table id="example" class="table table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Count</th>
+                        <th>_id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i=0; i < players.length; i++) { %>
+                        <tr>
+                             <td><%= i %>                   </td>
+                             <td><%= players[i].id %>       </td>
+                             <td><input id="FName_<%= players[i].id %>" class="FName" value="<%= players[i].FName %>" /></td>
+                             <td><input id="LName_<%= players[i].id %>" class="LName" value="<%= players[i].LName %>" /></td>
+                             <td><%= players[i].Team %>     </td>
+                             <td><%= players[i].Position %> </td>
+                             <td><input id="Price_<%= players[i].id %>" class="Price" value="<%= players[i].Price %>" /></td>
+                             <td><button id="update_<%= players[i].id %>" class="update btn btn-primary">Update</button></td>
+                             <td><button id="delete_<%= players[i].id %>" class="delete btn btn-danger">Delete</button></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Count</th>
+                        <th>_id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
 
         </div>
 

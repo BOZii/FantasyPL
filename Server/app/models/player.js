@@ -7,7 +7,8 @@ var playerSchema = mongoose.Schema({
     Team             : String,
     FName            : String,
     LName            : String,
-    Position         : String
+    Position         : String,
+    Price            : String
     /*
     local            : {
         email        : String,
